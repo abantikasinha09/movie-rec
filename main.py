@@ -122,8 +122,8 @@ async def tmdb_get(
 
     url = f"{TMDB_BASE}{path}"
 
-    # Windows uses curl.exe
-    # Render/Linux uses curl
+    # Windows -> curl.exe
+    # Render/Linux -> curl
     curl_command = "curl.exe" if os.name == "nt" else "curl"
 
     command = [
@@ -275,18 +275,14 @@ def build_title_to_idx_map(
     if isinstance(indices, dict):
 
         for k, v in indices.items():
-            title_to_idx[
-                _norm_title(k)
-            ] = int(v)
+            title_to_idx[_norm_title(k)] = int(v)
 
         return title_to_idx
 
     try:
 
         for k, v in indices.items():
-            title_to_idx[
-                _norm_title(k)
-            ] = int(v)
+            title_to_idx[_norm_title(k)] = int(v)
 
         return title_to_idx
 
@@ -530,7 +526,10 @@ async def home(
 # =========================
 @app.get("/tmdb/search")
 async def tmdb_search(
-    query: str = Query(..., min_length=1),
+    query: str = Query(
+        ...,
+        min_length=1
+    ),
     page: int = Query(
         1,
         ge=1,
